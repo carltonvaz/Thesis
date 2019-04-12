@@ -13,9 +13,6 @@
 # Adapted from batch processing boiler plate
 # ( Script Editor > Templates > ImageJ 1.x > Batch > Process Folder (Python) )
 
-# See also Process_Folder.ijm for a version of this code
-# in the ImageJ 1.x macro language.
-
 import os
 from ij import IJ, ImagePlus
 from ij.measure import ResultsTable
