@@ -4,7 +4,7 @@ This script was developed to enable batch processing using the ComDet ImageJ plu
 
 The script allows the user to process multiple 16 bit TIFF files through a simple user interface:
 
-<img src="https://github.com/carltonvaz/Thesis/blob/master/github%20images/AnalyzeSpots%20interface.PNG" width="900" height="900"/>
+<img src="https://github.com/carltonvaz/Thesis/blob/master/github%20images/AnalyzeSpots%20interface.PNG" width="200" height="200"/>
 
 # Getting started
 
