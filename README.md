@@ -14,7 +14,7 @@ The script allows the user to process multiple 16 bit TIFF files through a simpl
 
 The script was developed using the Fiji distribution (recommended) of ImageJ (https://fiji.sc/). It should work with other distributions that support ImageJ2, but has not been tested in these environments.
 
-The ComDet plugin needs to be installed and integrated with ImageJ as described here: (https://github.com/ekatrukha/ComDet/wiki/How-to-install-plugin)
+The ComDet plugin needs to be installed and integrated with ImageJ as described here: https://github.com/ekatrukha/ComDet/wiki/How-to-install-plugin
 
 ## Integrating script with ImageJ
 
@@ -24,4 +24,4 @@ The ComDet plugin needs to be installed and integrated with ImageJ as described 
 4. Place the ‘AnalyzeSpots_.py’ file in Fiji.app/plugins/Scripts and restart Fiji.
 5. To run the script, *Fiji Menu > Plugins > Scripts > AnalyzeSpots*.
 
-See: (https://imagej.net/Scripting#Adding_scripts_to_the_Plugins_menu) for reference
+See: https://imagej.net/Scripting#Adding_scripts_to_the_Plugins_menu for reference
