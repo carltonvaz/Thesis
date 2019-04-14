@@ -27,7 +27,7 @@ desiredCols = ["X_(px)", "Y_(px)", "xMin", "yMin", "xMax", "yMax", "NArea", "Int
 intensityCol = "IntegratedInt"
 
 # Batch summary columns
-batchCols = ["Image", "Count", "Min IntegratedInt", "Max IntegratedInt", "Mean IntegratedInt", \
+batchCols = ["Image", "Count", "Min IntegratedInt", "Max IntegratedInt", "Mean IntegratedInt", "Median IntegratedInt",\
             "Variance IntegratedInt", "SD IntegratedInt", "CoV (%) IntegratedInt"]
 
 #Functions
@@ -92,38 +92,51 @@ def process(srcDir, dstDir, currentDir, fileName):
     # Find intensity of 4th brightest spot
     intensityColIndex = rs.getColumnIndex(intensityCol)
     intensities = sorted(rs.getColumnAsDoubles(intensityColIndex), reverse=True)
-    markerIntensityThresh = intensities[3]
 
+    if (rs.size() > 4):     # spots detected (excluding markers)
+        markerIntensityThresh = intensities[3]
 
-    # Calculate min, max, mean for all spots except those classified as markers
-    # (can have more than 4 markers in case of ties)
-    N = 0
-    mean = 0
-    minimum = float('Inf')
-    maximum = -minimum
-    for intensity in intensities:
-        if intensity < markerIntensityThresh:
-            mean += intensity
-            N += 1
-            minimum = min(minimum, intensity)
-            maximum = max(maximum, intensity)
+        # Calculate min, max, mean for all spots except those classified as markers
+        # (can have more than 4 markers in case of ties)
+        N = 0
+        mean = 0
+        minimum = float('Inf')
+        maximum = -minimum
+        for intensity in intensities:
+            if intensity < markerIntensityThresh:
+                mean += intensity
+                N += 1
+                minimum = min(minimum, intensity)
+                maximum = max(maximum, intensity)
 
-    mean = mean/N
+        mean = mean/N
 
-    # Calculate variance, SD, CoV for all spots except those classified as markers
-    # (can have more than 4 markers in case of ties)
-    var = 0
-    for intensity in intensities:
-        if intensity < markerIntensityThresh:
-            var += (intensity - mean)**2
+        # Calculate median across spots except those classified as markers
+        intensities = sorted(intensities)
+        if (math.fmod(N, 2) == 0):
+            median = (intensities[int(N/2) - 1] + intensities[int(N/2)]) / 2    # indices start at 0
+        else:
+            median = intensities[int(math.floor(N/2))]
 
-    var = var/(N - 1)
-    sd = math.sqrt(var)
-    CoV = (sd/mean)*100   # coefficient of variation
+        # Calculate variance, SD, CoV for all spots except those classified as markers
+        # (can have more than 4 markers in case of ties)
+        var = 0
+        for intensity in intensities:
+            if intensity < markerIntensityThresh:
+                var += (intensity - mean)**2
 
-    stats = [fileName.replace(ext, ""), str(N), str(minimum), str(maximum), str(mean), str(var), str(sd), str(CoV)]
+        var = var/(N - 1)
+        sd = math.sqrt(var)
+        CoV = (sd/mean)*100   # coefficient of variation
 
-    print "Count: ", str(N), ", Min: ", str(minimum), ", Max: ", str(maximum), ", Mean: ", str(mean), ", Variance: ", str(var), ", SD: ", str(sd), ", CoV: ", str(CoV)
+    else:   # only markers/nothing detected
+        markerIntensityThresh = 0
+        N = 0
+        minimum = maximum = mean = median = var = sd = CoV = "n/a"
+
+    print "Count: ", str(N), ", Min: ", str(minimum), ", Max: ", str(maximum), ", Mean: ", str(mean), ", Median: ", str(median), ", Variance: ", str(var), ", SD: ", str(sd), ", CoV: ", str(CoV)
+
+    stats = [fileName.replace(ext, ""), str(N), str(minimum), str(maximum), str(mean), str(median), str(var), str(sd), str(CoV)]
 
     # Write results to csv
     csvDir = os.path.join(dstDir, "Intensity Results")
@@ -141,6 +154,7 @@ def process(srcDir, dstDir, currentDir, fileName):
         w.writerow(["Min IntegratedInt", str(minimum)])
         w.writerow(["Max IntegratedInt", str(maximum)])
         w.writerow(["Mean IntegratedInt", str(mean)])
+        w.writerow(["Median IntegratedInt", str(median)])
         w.writerow(["Variance IntegratedInt", str(var)])
         w.writerow(["SD IntegratedInt", str(sd)])
         w.writerow(["CoV (%) IntegratedInt", str(CoV)])
