@@ -1,9 +1,10 @@
 # ComDet batch processing
 
-This script was developed to enable batch processing using the ComDet ImageJ plugin (https://imagej.net/Spots_colocalization_(ComDet)) for a specific microarray image dataset as part of an undergraduate thesis.
+This script was developed to enable batch processing using the ComDet ImageJ plugin developed by Eugene Katrukha (https://imagej.net/Spots_colocalization_(ComDet)) for a specific microarray image dataset as part of an undergraduate thesis.
 
 The script allows the user to process multiple 16 bit TIFF files through a simple user interface:
-![User interface](https://github.com/carltonvaz/Thesis/blob/master/github%20images/AnalyzeSpots%20interface.PNG)
+
+![User interface](https://github.com/carltonvaz/Thesis/blob/master/github%20images/AnalyzeSpots%20interface.PNG =900x900)
 
 # Getting started
 
